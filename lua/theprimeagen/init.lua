@@ -46,14 +46,50 @@ autocmd({"BufWritePre"}, {
     command = [[%s/\s\+$//e]],
 })
 
-autocmd('BufEnter', {
+-- Colorscheme is set once at startup via lazy config
+-- Don't reload on every buffer enter to preserve integration highlights
+autocmd('FileType', {
+    group = ThePrimeagenGroup,
+    pattern = "zig",
+    callback = function()
+        pcall(vim.cmd.colorscheme, "tokyonight-night")
+    end
+})
+
+-- Open neo-tree when starting with a directory
+autocmd('VimEnter', {
+    group = ThePrimeagenGroup,
+    callback = function(data)
+        -- Check if the argument is a directory
+        local directory = vim.fn.isdirectory(data.file) == 1
+
+        if directory then
+            -- Change to the directory
+            vim.cmd.cd(data.file)
+            -- Open neo-tree
+            vim.cmd('Neotree show')
+        end
+    end
+})
+
+-- Create a highlight with your terminal's actual background
+-- Change #000000 to your terminal's background color (black, or whatever it is)
+vim.api.nvim_set_hl(0, "TerminalBG", { bg = "#000000", fg = "#ffffff" })
+
+autocmd('ColorScheme', {
     group = ThePrimeagenGroup,
     callback = function()
-        if vim.bo.filetype == "zig" then
-            pcall(vim.cmd.colorscheme, "tokyonight-night")
-        else
-            pcall(vim.cmd.colorscheme, "rose-pine-moon")
-        end
+        -- Recreate after colorscheme loads
+        vim.api.nvim_set_hl(0, "TerminalBG", { bg = "#000000", fg = "#ffffff" })
+    end
+})
+
+-- Apply to terminal windows when they open
+autocmd('TermOpen', {
+    group = ThePrimeagenGroup,
+    callback = function()
+        -- Use a different background color for terminal
+        vim.wo.winhighlight = "Normal:TerminalBG,NormalNC:TerminalBG"
     end
 })
 

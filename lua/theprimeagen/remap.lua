@@ -80,7 +80,7 @@ vim.keymap.set("n", "<leader><leader>", function()
 end)
 
 -- Terminal keybindings
-vim.keymap.set("n", "<leader>tv", "<cmd>vsplit | terminal<CR>")         -- vertical split
-vim.keymap.set("n", "<leader>th", "<cmd>belowright split | terminal<CR>")   -- horizontal split at bottom
-vim.keymap.set("t", "<leader><Esc>", "<C-\\><C-n>")                     -- escape terminal mode
+vim.keymap.set("n", "<leader>tv", "<cmd>vsplit | terminal<CR>", { desc = "Open vertical terminal" })
+vim.keymap.set("n", "<leader>th", "<cmd>belowright split | terminal<CR>", { desc = "Open horizontal terminal" })
+vim.keymap.set("t", "<leader><Esc>", "<C-\\><C-n>")  -- escape terminal mode
 

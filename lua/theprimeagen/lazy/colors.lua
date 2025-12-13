@@ -1,9 +1,13 @@
 function ColorMyPencils(color)
-	color = color  or "rose-pine-moon"
+	color = color  or "catppuccin-mocha"
 	vim.cmd.colorscheme(color)
 
-	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+	-- Don't override Catppuccin's background colors
+	-- If you want transparency, enable it in the Catppuccin config instead
+	if color ~= "catppuccin-mocha" and color ~= "catppuccin" then
+		vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+		vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+	end
 end
 
 return {
@@ -14,10 +18,20 @@ return {
 
     {
         "folke/tokyonight.nvim",
-        lazy = false,
+        lazy = true,
         opts = {},
         config = function()
-            ColorMyPencils()
+            require("tokyonight").setup({
+                style = "storm",
+                transparent = true,
+                terminal_colors = true,
+                styles = {
+                    comments = { italic = false },
+                    keywords = { italic = false },
+                    sidebars = "dark",
+                    floats = "dark",
+                },
+            })
         end
     },
     {
@@ -50,27 +64,6 @@ return {
             })
         end,
     },
-    {
-        "folke/tokyonight.nvim",
-        config = function()
-            require("tokyonight").setup({
-                -- your configuration comes here
-                -- or leave it empty to use the default settings
-                style = "storm", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
-                transparent = true, -- Enable this to disable setting the background color
-                terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
-                styles = {
-                    -- Style to be applied to different syntax groups
-                    -- Value is any valid attr-list value for `:help nvim_set_hl`
-                    comments = { italic = false },
-                    keywords = { italic = false },
-                    -- Background styles. Can be "dark", "transparent" or "normal"
-                    sidebars = "dark", -- style for sidebars, see below
-                    floats = "dark", -- style for floating windows
-                },
-            })
-        end
-    },
 
     {
         "rose-pine/neovim",
@@ -81,8 +74,46 @@ return {
                     italic = false,
                 },
             })
+        end
+    },
 
-            ColorMyPencils();
+    {
+        "catppuccin/nvim",
+        name = "catppuccin",
+        lazy = false,
+        priority = 1000,
+        config = function()
+            require("catppuccin").setup({
+                flavour = "mocha", -- latte, frappe, macchiato, mocha
+                transparent_background = false,
+                no_italic = true, -- Disable italics
+                term_colors = false, -- Keep your terminal's own color scheme
+                integrations = {
+                    cmp = true,
+                    gitsigns = true,
+                    neotree = true,
+                    treesitter = true,
+                    nvimtree = true,
+                    which_key = true,
+                    telescope = {
+                        enabled = true,
+                    },
+                    mini = {
+                        enabled = true,
+                    },
+                    native_lsp = {
+                        enabled = true,
+                    },
+                },
+                color_overrides = {
+                    mocha = {
+                        base = "#1e1e2e",
+                        mantle = "#181825",
+                        crust = "#11111b",
+                    },
+                },
+            })
+            ColorMyPencils()
         end
     },
 

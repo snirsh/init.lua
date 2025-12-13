@@ -4,7 +4,7 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
         require("oil").setup({
-            default_file_explorer = true,
+            default_file_explorer = false,  -- Let neo-tree be the default
             columns = {
                 "icon",
                 "permissions",
