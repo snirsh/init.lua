@@ -18,7 +18,7 @@ return {
                 hide_signcolumn = true,
             },
             refresh = {
-                enable = false,
+                enable = true,
             },
             git = {
                 use_git_root = true,
